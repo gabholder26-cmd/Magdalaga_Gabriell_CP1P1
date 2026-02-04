@@ -1,0 +1,2 @@
+#No external packages needed for Part 1
+#Will add customtkinter, pillow, etc. in later parts
