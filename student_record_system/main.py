@@ -4,8 +4,7 @@ Main Program
 
 Author(s): Gabriell Briones Magdalaga
 Date: February 2, 2026
-Version: 1.0 Part 1
-"""
+Version: 2.0 Part 2"""
 
 from src.utils import validators, formatters, helpers
 from src.data import student_data
@@ -93,12 +92,10 @@ def view_all_students():
     else:
         print(formatters.format_table_header(), end="")
         for student in students:
-            for student in students:
-             print(formatters.format_table_row(student), end="")  
-        print(f"\nTotal Students:  {len(students)}")
-
+            print(formatters.format_table_row(student), end="")
+        print(f"\nTotal Students: {len(students)}")
     helpers.pause()
-
+    
 def search_student():
     """Search for a student by ID."""
     print("\n" + "="*60)
@@ -219,7 +216,7 @@ def main():
     """Main program loop"""
     print("\n" + "="*60)
     print("Welcome to Student Record Management System")
-    print("Version 1.0 - Part 1: Modular Programming")
+    print("Version 2.0 - Part 2: Modular Programming")
     print("="*60)
     helpers.pause()
 
@@ -238,6 +235,7 @@ def main():
         elif choice == "5":
             delete_student_menu()
         elif choice == "6":
+            student_data.save_on_extit()
             print("\nThank you for using Student Record Management System!")
             break
         else:

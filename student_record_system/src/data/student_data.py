@@ -3,10 +3,13 @@ Student Data Module
 Manages student data storage (in-memory for now).
 """
 
+from src.data import storage
+
 #In-memory storage
-students = []
+students = storage.load_students()
 
 def add_student(student):
+    
     """
     Add a student to the data base.
 
@@ -21,6 +24,7 @@ def add_student(student):
         return False
     
     students.append(student)
+    storage.save_students(students)
     return True
 
 def find_student_by_id(student_id):
@@ -58,6 +62,7 @@ def update_student(student_id, updated_data):
         return False
     
     student.update(updated_data)
+    storage.save_students(students)
     return True
 def delete_student(student_id):
     """"
@@ -74,9 +79,15 @@ def delete_student(student_id):
         return False
     
     students.remove(student)
+    storage.save_students(students)
     return True
 
 def get_student_count():
     """Return total number of students."""
     return len(students)
+
+def save_on_extit():
+    """Save students to file before exiting."""
+    storage.save_students(students)
+    print("Records saved. Goodbye!")
   

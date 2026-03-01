@@ -32,8 +32,8 @@ def format_student_record(student):
 
 def format_table_header():
     """Return formatted table header for student list."""
-    header = f"{'ID':<12}{'Name':<25}{'Age':<5}{'Grades':<10}\n"
-    header += "-"*52 + "\n"
+    header = f"{'ID':<16}{'Name':<25}{'Age':<6}{'Grades':<10}\n"
+    header += "-"*57 + "\n"
     return header
 
 def format_table_row(student):
@@ -45,5 +45,5 @@ def format_table_row(student):
     grades = student.get("grades", [])
     weighted_avg = (grades[0] * 0.20 + grades[1] * 0.20 + grades[2] * 0.20 + grades[3] * 0.40) if grades else 0
     
-    return f"{student_id:<12}{name:<25}{age:<5}{weighted_avg:<10.2f}\n"
+    return f"{student_id:<16}{name:<25}{age:<6}{weighted_avg:<10.2f}\n"
 
