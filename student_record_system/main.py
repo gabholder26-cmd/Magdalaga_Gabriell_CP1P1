@@ -3,11 +3,16 @@ Student Record Management System
 Main Program
 
 Author(s): Gabriell Briones Magdalaga
-Date: February 2, 2026
-Version: 2.0 Part 2"""
+Date: March 25, 2026
+Version: 3.0 Part 3
+"""
 
 from src.utils import validators, formatters, helpers
-from src.data import student_data
+from src.models.student import Student
+from src.data.student_manager import StudentManager
+
+# Create one manager instance used by all functions
+manager = StudentManager()
 
 def display_menu():
     """Display main menu."""
@@ -28,55 +33,49 @@ def add_student_menu():
     print("ADD NEW STUDENT")
     print("="*60)
 
-    #Get student ID
+    # Get student ID
     student_id = helpers.get_valid_input(
         "Enter Student ID (YYYY-SS-NNNN): ",
         validators.validate_student_id,
         "Invalid Student ID format! Please use YYYY-SS-NNNN."
     )
 
-    #Check if ID exists
-    if student_data.find_student_by_id(student_id):
+    # Check if ID exists
+    if manager.find_by_id(student_id):
         print(f"Student ID {student_id} already exists!")
         helpers.pause()
         return
-        
-    #Get student name
+
+    # Get student name
     name = helpers.get_valid_input(
         "Enter name: ",
         validators.validate_name,
         "Invalid name! Must be at least 2 characters"
     ).title()
 
-    #Get student age
+    # Get student age
     age = int(helpers.get_valid_input(
         "Enter age: ",
         validators.validate_age,
         "Invalid age! Must be between 17-100"
     ))
 
-    #Get email
+    # Get email
     email = helpers.get_valid_input(
         "Enter email: ",
         validators.validate_email,
         "Invalid email format!"
     ).lower()
 
-    #Create student record
-    student = {
-        'id' : student_id,
-        'name' : name,
-        'age' : age,
-        'email' : email,
-        'grades' : []
-    }
+    # Create Student object (no more dictionary!)
+    student = Student(student_id, name, age, email)
 
-    #Add to database
-    if student_data.add_student(student):
+    # Add to manager
+    if manager.add_student(student):
         print(f"\nStudent {name} added successfully!")
     else:
         print("\nFailed to add student!")
-    
+
     helpers.pause()
 
 def view_all_students():
@@ -84,8 +83,8 @@ def view_all_students():
     print("\n" + "="*60)
     print("ALL STUDENTS")
     print("="*60)
-    
-    students = student_data.get_all_students()
+
+    students = manager.get_all()
 
     if not students:
         print("No students in the system.")
@@ -93,9 +92,9 @@ def view_all_students():
         print(formatters.format_table_header(), end="")
         for student in students:
             print(formatters.format_table_row(student), end="")
-        print(f"\nTotal Students: {len(students)}")
+        print(f"\nTotal Students: {manager.count()}")
     helpers.pause()
-    
+
 def search_student():
     """Search for a student by ID."""
     print("\n" + "="*60)
@@ -104,7 +103,7 @@ def search_student():
 
     student_id = input("Enter Student ID: ").strip()
 
-    student = student_data.find_student_by_id(student_id)
+    student = manager.find_by_id(student_id)
 
     if student:
         print(formatters.format_student_record(student))
@@ -114,20 +113,20 @@ def search_student():
     helpers.pause()
 
 def update_student_menu():
-    """Update student information"""
+    """Update student information."""
     print("\n" + "="*60)
     print("UPDATE STUDENT")
     print("="*60)
 
     student_id = input("Enter Student ID: ").strip()
 
-    student = student_data.find_student_by_id(student_id)
+    student = manager.find_by_id(student_id)
 
     if not student:
         print(f"Student ID {student_id} not found!")
         helpers.pause()
         return
-    
+
     print(f"\nCurrent Information: ")
     print(formatters.format_student_record(student))
 
@@ -156,7 +155,7 @@ def update_student_menu():
             "Invalid age!"
         ))
         updated_data['age'] = age
-        
+
     elif choice == "3":
         email = helpers.get_valid_input(
             "New Email: ",
@@ -169,13 +168,13 @@ def update_student_menu():
         print("Update cancelled.")
         helpers.pause()
         return
-    
+
     else:
         print("Invalid choice!")
         helpers.pause()
         return
-    
-    if student_data.update_student(student_id, updated_data):
+
+    if manager.update_student(student_id, updated_data):
         print("\nStudent updated successfully!")
     else:
         print("\nFailed to update student!")
@@ -183,27 +182,27 @@ def update_student_menu():
     helpers.pause()
 
 def delete_student_menu():
-    """Delete  a student."""
+    """Delete a student."""
     print("\n" + "="*60)
     print("DELETE STUDENT")
     print("="*60)
 
     student_id = input("Enter Student ID: ").strip()
 
-    student = student_data.find_student_by_id(student_id)
+    student = manager.find_by_id(student_id)
 
     if not student:
         print(f"Student ID {student_id} not found!")
         helpers.pause()
         return
-    
+
     print(f"\nStudent to delete:")
     print(formatters.format_student_record(student))
 
     confirm = input("Confirm deletion? (yes/no): ").strip().lower()
 
     if confirm == "yes":
-        if student_data.delete_student(student_id):
+        if manager.delete_student(student_id):
             print("\nStudent deleted successfully!")
         else:
             print("\nFailed to delete student!")
@@ -213,10 +212,10 @@ def delete_student_menu():
     helpers.pause()
 
 def main():
-    """Main program loop"""
+    """Main program loop."""
     print("\n" + "="*60)
     print("Welcome to Student Record Management System")
-    print("Version 2.0 - Part 2: Modular Programming")
+    print("Version 3.0 - Part 3: OOP Integration")
     print("="*60)
     helpers.pause()
 
@@ -235,7 +234,7 @@ def main():
         elif choice == "5":
             delete_student_menu()
         elif choice == "6":
-            student_data.save_on_extit()
+            manager.save_on_exit()
             print("\nThank you for using Student Record Management System!")
             break
         else:
@@ -244,4 +243,3 @@ def main():
 
 if __name__ == "__main__":
     main()
-
