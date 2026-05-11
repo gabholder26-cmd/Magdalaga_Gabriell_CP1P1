@@ -1,0 +1,18 @@
+[
+  {
+    "type": "sqlite",
+    "path": "c:\\Users\\qwert\\Downloads\\Magdalaga_Gabriell_CP1P1\\student_record_system\\data\\students.db"
+  },
+  {
+    "type": "sqlite",
+    "path": "c:\\Users\\qwert\\Downloads\\Magdalaga_Gabriell_CP1P1\\data\\students.db"
+  },
+  {
+    "type": "sqlite",
+    "path": "c:\\Users\\qwert\\Downloads\\Magdalaga_Gabriell_CP1P1\\students.db"
+  },
+  {
+    "type": "sqlite",
+    "path": "c:\\Users\\qwert\\Downloads\\Magdalaga_Gabriell_CP1P1\\student_record_system\\students.db"
+  }
+]

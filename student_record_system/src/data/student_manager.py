@@ -1,59 +1,58 @@
 """
 Student Manager
-Handles all CRUD logic for student records using Student objects.
+Handles all CRUD operations for student records.
+This is the Application Logic layer between the GUI and the Database.
 """
 
 from src.models.student import Student
 from src.data import storage
 
+
 class StudentManager:
     def __init__(self):
+        # Load existing records from the database when the app starts
         raw_data = storage.load_students()
         self.students = [Student.from_dict(d) for d in raw_data]
 
     def add_student(self, student):
-        """Add a Student object. Returns True if successful."""
+        """
+        Add a Student object to the system.
+        Returns True if successful, False if ID already exists.
+        """
         if self.find_by_id(student.id):
             return False
+
         self.students.append(student)
-        storage.save_students([s.to_dict() for s in self.students])
+        storage.save_student(student.to_dict())
         return True
 
     def find_by_id(self, student_id):
-        """Find and return a Student by ID, or None if not found."""
+        """
+        Find and return a Student by ID.
+        Returns None if not found.
+        """
         for student in self.students:
             if student.id == student_id:
                 return student
         return None
 
     def get_all(self):
-        """Return a list of all Student objects."""
+        """Return a copy of all students."""
         return self.students.copy()
 
-    def update_student(self, student_id, updates):
-        """Update a student, Returns True if successful."""
-        student = self.find_by_id(student_id)
-        if not student:
-            return False
-        for key, value in updates.items():
-            setattr(student, key, value)
-        storage.save_students([s.to_dict() for s in self.students])
-        return True
-
     def delete_student(self, student_id):
-        """Delete a student by ID. Returns True if successful."""
+        """
+        Delete a student by ID.
+        Returns True if deleted, False if not found.
+        """
         student = self.find_by_id(student_id)
         if not student:
             return False
+
         self.students.remove(student)
-        storage.save_students([s.to_dict() for s in self.students])
+        storage.delete_student(student_id)
         return True
 
     def count(self):
-        """Return total number of students."""
+        """Return the total number of students."""
         return len(self.students)
-
-    def save_on_exit(self):
-        """Save all students to file before exiting."""
-        storage.save_students([s.to_dict() for s in self.students])
-        print("Records saved. Goodbye!")

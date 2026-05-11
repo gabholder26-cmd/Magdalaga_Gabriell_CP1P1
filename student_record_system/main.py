@@ -1,17 +1,18 @@
 """
 Student Record Management System
-Main Program
+Main Launcher
 
 Author(s): Gabriell Briones Magdalaga
-Date: March 25, 2026
+Date: May 11, 2026
 Version: 4.0
 """
 
 import customtkinter as ctk
-from src.ui.mainwindow import MainWindow
+from src.ui.main_window import MainWindow
 
 ctk.set_appearance_mode("dark")
 ctk.set_default_color_theme("blue")
 
 if __name__ == "__main__":
-    main()
+    app = MainWindow()
+    app.mainloop()
